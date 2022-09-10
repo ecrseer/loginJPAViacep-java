@@ -5,15 +5,18 @@
 
 <head>
     <%@include file="../components/bootstrap.jsp" %>
-    <title>Login de vagas</title>
+    <title>ACME Cadastrese</title>
 </head>
 
 <body>
 <%@include file="../components/menu.jsp" %>
-<h1>Logue-se </h1>
-<form action="logar" method="post">
-
-     
+<h1>ACME </h1>
+<h2>Cadastre-se</h2>
+<form action="cadastrar" method="post">
+    <div class="mb-3 col-6">
+        <label for="name" class="form-label">Nome</label>
+        <input type="text" name="name" id="name" class="form-control">
+    </div>
     <div class="mb-3 col-6">
         <label for="email" class="form-label">Email</label>
         <input type="text" name="email" id="email" class="form-control">
@@ -23,16 +26,9 @@
         <input type="password" name="password" id="password" class="form-control" id="password">
     </div>
     <div class="col-12">
-        <button class="btn btn-primary" type="submit">Entrar</button>
+        <button class="btn btn-primary" type="submit">Cadastrar</button>
     </div>
 </form>
-<c:if test="${loggedUser!=null && loggedUser.getEmail()!=null}">
-    <h1>Usuario logado com sucesso</h1>
-    <pre>${loggedUser}</pre>
-</c:if>
-<c:if test="${senhaErrada==true}">
-    <h2>Senha incorreta</h2>
-</c:if>
 </body>
 
 </html>

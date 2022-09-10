@@ -1,6 +1,9 @@
 package br.infnet.gabrieljustino.acmelogs.tp.acmelogs.domain;
 
 import br.infnet.gabrieljustino.acmelogs.tp.acmelogs.dtos.iMyWebDto;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity(name = "usuario")
 public class Usuario implements Serializable, iMyWebDto {
     private static final long serialVersionUID = 1L;
@@ -16,7 +22,8 @@ public class Usuario implements Serializable, iMyWebDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idUsuario;
-    private String login;
+    private String name;
+    private String email;
     private String password;
     private String profilePic;
 
@@ -32,44 +39,10 @@ public class Usuario implements Serializable, iMyWebDto {
     public String toString() {
         return "Usuario{" +
                 "idUsuario=" + idUsuario +
-                ", login='" + login + '\'' +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
-
-    public Usuario() {
-    }
-
-    public long getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(long idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public Usuario(long idUsuario, String login, String password) {
-        this.setIdUsuario(idUsuario);
-        this.login = login;
-        this.password = password;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
 
     @Override
     public String getKey() {
