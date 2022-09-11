@@ -29,7 +29,8 @@ public class UsuarioController {
     }
 
     @GetMapping("/registrar")
-    public String registrar() {
+    public String registrar(HttpServletRequest request) {
+        request.getSession().setAttribute(KEY_CADASTRANDO_USUARIO, null);
         return "login/cadastrar";
     }
 
@@ -49,7 +50,6 @@ public class UsuarioController {
         } catch (Exception err) {
             return err.getMessage();
         }
-
         return "login/login";
     }
 
@@ -64,14 +64,18 @@ public class UsuarioController {
         } catch (Exception err) {
             err.printStackTrace();
         }
-
         return "login/cadastrar";
     }
 
     @PostMapping("/cadastrar")
-    public String publicarUsuario(UsuarioComEndereco usuarioComEndereco) {
+    public String publicarUsuario(UsuarioComEndereco usuarioComEndereco, HttpServletRequest request) {
         var resultSavedUsuario = usuarioRepository.save(usuarioComEndereco);
         System.out.println(resultSavedUsuario);
+        var session = request.getSession();
+        
+        UsuarioComEndereco usuario = (UsuarioComEndereco) session.getAttribute(KEY_CADASTRANDO_USUARIO);
+        request.setAttribute("cadastrado", usuario);
+        session.setAttribute(KEY_CADASTRANDO_USUARIO, null);
         return "login/cadastrar";
     }
 

@@ -9,7 +9,13 @@
 
 <body>
 <%@include file="./components/menu.jsp" %>
-<h1>ACME  </h1>
+<h1>ACME </h1>
+
+<script>
+    (function () {
+        window.location.href = '/usuario/registrar';
+    })()
+</script>
 </body>
 
 </html>

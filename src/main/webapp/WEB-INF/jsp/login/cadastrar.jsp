@@ -11,7 +11,7 @@
 <body>
 <%@include file="../components/menu.jsp" %>
 <h1>ACME </h1>
-<h2>Cadastre-se${registeringUser}</h2>
+<h2>Cadastre-se</h2>
 <form action="cadastrar" method="post" id="cadastraForm">
     <div class="mb-3 col-6">
         <label for="name" class="form-label">Nome</label>
@@ -30,11 +30,7 @@
     <div class=" mb-3 col-6">
         <label for="cep" class="form-label">CEP</label>
         <input type="text" name="cep" id="cep" class="form-control" value="${registeringUser.getCep()}"
-               onblur="cadastraForm.submit">
-    </div>
-    <div class="col-12">
-        <button class="btn btn-primary" type="submit" formaction="cadastroPesquisaCep" formmethod="post">Pesquisar cep
-        </button>
+               onblur="switchForm()">
     </div>
     <c:if test="${registeringUser!=null}">
 
@@ -67,6 +63,16 @@
         </div>
     </c:if>
 </form>
+<c:if test="${cadastrado!=null}">
+    <h2>Usuario ${cadastrado.email} cadastrado com sucesso</h2>
+</c:if>
+<script>
+    function switchForm() {
+        const form = cadastraForm;
+        form.action = 'cadastroPesquisaCep'
+        form.submit()
+    }
+</script>
 </body>
 
 </html>
