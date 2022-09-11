@@ -1,12 +1,16 @@
 package br.infnet.gabrieljustino.acmelogs.tp.acmelogs.controllers;
 
 import br.infnet.gabrieljustino.acmelogs.tp.acmelogs.domain.UsuarioComEndereco;
+import br.infnet.gabrieljustino.acmelogs.tp.acmelogs.dtos.UsuarioComArquivoDto;
 import br.infnet.gabrieljustino.acmelogs.tp.acmelogs.repository.UsuarioRepository;
 import br.infnet.gabrieljustino.acmelogs.tp.acmelogs.repository.ViacepRepository;
+import br.infnet.gabrieljustino.acmelogs.tp.acmelogs.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,8 +21,11 @@ public class UsuarioController {
     private String KEY_SESSAO_USUARIO = new UsuarioComEndereco().getKey();
     private String KEY_CADASTRANDO_USUARIO = new UsuarioComEndereco().getCadastrandoKey();
 
+    /*@Autowired
+    UsuarioRepository usuarioRepository;*/
+
     @Autowired
-    UsuarioRepository usuarioRepository;
+    UsuarioService usuarioService;
 
     @Autowired
     ViacepRepository viacepRepository;
@@ -39,7 +46,7 @@ public class UsuarioController {
         var reqSession = request.getSession();
 
         try {
-            var resultSavedUsuario = usuarioRepository.findUsuarioByEmail(usuarioComEndereco.getEmail());
+            var resultSavedUsuario = usuarioService.findUsuarioByEmail(usuarioComEndereco.getEmail());
             if (usuarioComEndereco.getPassword().equals(resultSavedUsuario.getPassword())) {
                 System.out.println(resultSavedUsuario);
                 reqSession.setAttribute(KEY_SESSAO_USUARIO, resultSavedUsuario);
@@ -53,8 +60,8 @@ public class UsuarioController {
         return "login/login";
     }
 
-    @PostMapping("/cadastroPesquisaCep")
-    public String cadastroPesquisaCep(UsuarioComEndereco usuario, HttpServletRequest request) {
+    @PostMapping(value = "/cadastroPesquisaCep")
+    public String cadastroPesquisaCep(@ModelAttribute UsuarioComArquivoDto usuario, HttpServletRequest request) {
         var session = request.getSession();
         session.setAttribute(KEY_CADASTRANDO_USUARIO, null);
         try {
@@ -68,14 +75,22 @@ public class UsuarioController {
     }
 
     @PostMapping("/cadastrar")
-    public String publicarUsuario(UsuarioComEndereco usuarioComEndereco, HttpServletRequest request) {
-        var resultSavedUsuario = usuarioRepository.save(usuarioComEndereco);
-        System.out.println(resultSavedUsuario);
+    public String publicarUsuario(@ModelAttribute UsuarioComArquivoDto dto,
+                                  HttpServletRequest request) {
+
+        UsuarioComEndereco usuario = dto.makeClone();
+        var resultSavedUsuario = usuarioService.save(usuario);
+
         var session = request.getSession();
-        
-        UsuarioComEndereco usuario = (UsuarioComEndereco) session.getAttribute(KEY_CADASTRANDO_USUARIO);
+        var result = usuarioService.editUser(usuario, dto.getProfilePic());
+
+
         request.setAttribute("cadastrado", usuario);
         session.setAttribute(KEY_CADASTRANDO_USUARIO, null);
+
+        if(usuarioService.loadUser(usuario)){
+            return "login/cadastrar";
+        }
         return "login/cadastrar";
     }
 

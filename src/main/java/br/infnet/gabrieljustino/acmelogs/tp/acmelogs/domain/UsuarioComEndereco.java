@@ -20,7 +20,6 @@ public class UsuarioComEndereco extends Endereco implements Serializable, iMyWeb
     private String name;
     private String email;
     private String password;
-    private String profilePic;
     private String telefone;
     private String numeroEndereco;
 
@@ -37,6 +36,13 @@ public class UsuarioComEndereco extends Endereco implements Serializable, iMyWeb
         this.setSiafi(endereco.getSiafi());
     }
 
+    public UsuarioComEndereco makeClone() {
+        var context = new UsuarioComEndereco(getIdUsuario(), getName(), getEmail(),
+                getPassword(), getTelefone(),
+                getNumeroEndereco());
+        context.setEndereco(super.makeClone());
+        return context;
+    }
 
     @Override
     public String toString() {
