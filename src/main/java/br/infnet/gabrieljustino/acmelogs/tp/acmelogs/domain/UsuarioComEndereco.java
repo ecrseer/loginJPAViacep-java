@@ -1,23 +1,18 @@
 package br.infnet.gabrieljustino.acmelogs.tp.acmelogs.domain;
 
 import br.infnet.gabrieljustino.acmelogs.tp.acmelogs.dtos.iMyWebDto;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "usuario")
-public class Usuario implements Serializable, iMyWebDto {
+public class UsuarioComEndereco extends Endereco implements Serializable, iMyWebDto {
     private static final long serialVersionUID = 1L;
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,14 +21,22 @@ public class Usuario implements Serializable, iMyWebDto {
     private String email;
     private String password;
     private String profilePic;
+    private String telefone;
+    private String numeroEndereco;
 
-    public String getProfilePic() {
-        return profilePic;
+    public void setEndereco(Endereco endereco) {
+        this.setCep(endereco.getCep());
+        this.setLogradouro(endereco.getLogradouro());
+        this.setComplemento(endereco.getComplemento());
+        this.setBairro(endereco.getBairro());
+        this.setLocalidade(endereco.getLocalidade());
+        this.setUf(endereco.getUf());
+        this.setIbge(endereco.getIbge());
+        this.setGia(endereco.getGia());
+        this.setDdd(endereco.getDdd());
+        this.setSiafi(endereco.getSiafi());
     }
 
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
-    }
 
     @Override
     public String toString() {
@@ -47,5 +50,9 @@ public class Usuario implements Serializable, iMyWebDto {
     @Override
     public String getKey() {
         return "loggedUser";
+    }
+
+    public String getCadastrandoKey() {
+        return "registeringUser";
     }
 }

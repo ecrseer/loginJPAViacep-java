@@ -10,6 +10,6 @@ public class IndexController {
 
     @GetMapping()
     public String inserir() {
-        return "redirect:/usuario/cadastrar";
+        return "redirect:/usuario/registrar";
     }
 }

@@ -19,7 +19,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/usuario/cadastrar">Cadastrar</a>
+                    <a class="nav-link active" aria-current="page" href="/usuario/registrar">Cadastrar</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="/usuario/logar">Login</a>

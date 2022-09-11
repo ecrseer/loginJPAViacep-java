@@ -5,7 +5,7 @@
 
 <head>
     <%@include file="../components/bootstrap.jsp" %>
-    <title>Login de vagas</title>
+    <title>Login </title>
 </head>
 
 <body>
@@ -13,17 +13,16 @@
 <h1>Logue-se </h1>
 <form action="logar" method="post">
 
-     
     <div class="mb-3 col-6">
         <label for="email" class="form-label">Email</label>
-        <input type="text" name="email" id="email" class="form-control">
+        <input type="email" name="email" id="email" class="form-control">
     </div>
     <div class="mb-3 col-6">
         <label for="password" class="form-label">Senha</label>
         <input type="password" name="password" id="password" class="form-control" id="password">
     </div>
     <div class="col-12">
-        <button class="btn btn-primary" type="submit">Entrar</button>
+        <button class="btn btn-primary" type="submit">Realizar login</button>
     </div>
 </form>
 <c:if test="${loggedUser!=null && loggedUser.getEmail()!=null}">
