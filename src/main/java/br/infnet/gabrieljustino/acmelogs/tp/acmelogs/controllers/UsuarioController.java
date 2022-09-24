@@ -2,15 +2,12 @@ package br.infnet.gabrieljustino.acmelogs.tp.acmelogs.controllers;
 
 import br.infnet.gabrieljustino.acmelogs.tp.acmelogs.domain.UsuarioComEndereco;
 import br.infnet.gabrieljustino.acmelogs.tp.acmelogs.dtos.UsuarioComArquivoDto;
-import br.infnet.gabrieljustino.acmelogs.tp.acmelogs.repository.UsuarioRepository;
 import br.infnet.gabrieljustino.acmelogs.tp.acmelogs.repository.ViacepRepository;
 import br.infnet.gabrieljustino.acmelogs.tp.acmelogs.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,14 +28,21 @@ public class UsuarioController {
     ViacepRepository viacepRepository;
 
     @GetMapping("/logar")
-    public String logar() {
+    public String paginaLogin(HttpServletRequest request) {
+        request.getSession().setAttribute(KEY_CADASTRANDO_USUARIO, null);
         return "login/login";
     }
 
     @GetMapping("/registrar")
-    public String registrar(HttpServletRequest request) {
+    public String paginaCadastro(HttpServletRequest request) {
         request.getSession().setAttribute(KEY_CADASTRANDO_USUARIO, null);
         return "login/cadastrar";
+    }
+
+    @GetMapping("/perfil")
+    public String paginaPerfil(HttpServletRequest request) {
+        request.getSession().setAttribute(KEY_CADASTRANDO_USUARIO, null);
+        return "login/perfil";
     }
 
     @PostMapping("/logar")
@@ -60,6 +64,54 @@ public class UsuarioController {
         return "login/login";
     }
 
+
+    @PostMapping("/cadastrar")
+    public String cadastrarUsuario(@ModelAttribute UsuarioComArquivoDto dto,
+                                   HttpServletRequest request) {
+
+        UsuarioComEndereco usuario = dto.makeClone();
+        var resultSavedUsuario = usuarioService.salvar(usuario);
+
+        var session = request.getSession();
+
+
+        request.setAttribute("cadastrado", usuario);
+        session.setAttribute(KEY_CADASTRANDO_USUARIO, null);
+        return "login/cadastrar";
+    }
+
+    @PostMapping("/editarUsuario")
+    public String editarUsuario(UsuarioComEndereco usuario,
+                                HttpServletRequest request) {
+
+        var session = request.getSession();
+        try {
+            UsuarioComEndereco logado = (UsuarioComEndereco) session.getAttribute(KEY_SESSAO_USUARIO);
+            logado.setName(usuario.getName());
+            var resultSavedUsuario = usuarioService.salvar(logado);
+
+            request.setAttribute("editado", resultSavedUsuario);
+            session.setAttribute(KEY_SESSAO_USUARIO, resultSavedUsuario);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "login/perfil";
+    }
+
+
+    @GetMapping("/deslogar")
+    public String deslogar(HttpServletRequest request) {
+
+        var session = request.getSession();
+        try {
+            session.setAttribute(KEY_SESSAO_USUARIO, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "login/login";
+    }
+
+
     @PostMapping(value = "/cadastroPesquisaCep")
     public String cadastroPesquisaCep(@ModelAttribute UsuarioComArquivoDto usuario, HttpServletRequest request) {
         var session = request.getSession();
@@ -70,26 +122,6 @@ public class UsuarioController {
             session.setAttribute(KEY_CADASTRANDO_USUARIO, usuario);
         } catch (Exception err) {
             err.printStackTrace();
-        }
-        return "login/cadastrar";
-    }
-
-    @PostMapping("/cadastrar")
-    public String publicarUsuario(@ModelAttribute UsuarioComArquivoDto dto,
-                                  HttpServletRequest request) {
-
-        UsuarioComEndereco usuario = dto.makeClone();
-        var resultSavedUsuario = usuarioService.save(usuario);
-
-        var session = request.getSession();
-        var result = usuarioService.editUser(usuario, dto.getProfilePic());
-
-
-        request.setAttribute("cadastrado", usuario);
-        session.setAttribute(KEY_CADASTRANDO_USUARIO, null);
-
-        if(usuarioService.loadUser(usuario)){
-            return "login/cadastrar";
         }
         return "login/cadastrar";
     }

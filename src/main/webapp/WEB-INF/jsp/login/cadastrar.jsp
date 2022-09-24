@@ -13,11 +13,7 @@
 <h1>ACME </h1>
 <h2>Cadastre-se</h2>
 <form action="cadastrar" method="post" id="cadastraForm" enctype="multipart/form-data">
-    <div class="mb-3 col-6">
-        <label for="profilePic" class="form-label">Perfil</label>
-        <input type="file" name="profilePic" class="form-control" id="profilePic" accept="image/png">
-        <p>somente png</p>
-    </div>
+
 
     <div class="mb-3 col-6">
         <label for="name" class="form-label">Nome</label>
@@ -70,7 +66,7 @@
     </c:if>
 </form>
 <c:if test="${cadastrado!=null}">
-    <img src="../images/${cadastrado.getEmail()}/profilePic.png" alt="carregando imagem, atualize a pagina"/>
+
     <h2>Usuario ${cadastrado.email} cadastrado com sucesso</h2>
 </c:if>
 <script>
