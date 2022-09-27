@@ -16,7 +16,7 @@ public class UsuarioService {
 
 
     public UsuarioComEndereco findUsuarioByEmail(String email) {
-        return usuarioRepository.findUsuarioByEmail(email);
+        return usuarioRepository.findByEmail(email);
     }
 
     public UsuarioComEndereco salvar(UsuarioComEndereco usuario) {

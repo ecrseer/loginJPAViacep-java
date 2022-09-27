@@ -29,8 +29,8 @@
     <h1>Usuario logado com sucesso</h1>
     <pre>${loggedUser}</pre>
 </c:if>
-<c:if test="${senhaErrada==true}">
-    <h2>Senha incorreta</h2>
+<c:if test="${falha!=null && loggedUser ==null}">
+    <h2>${falha}</h2>
 </c:if>
 </body>
 

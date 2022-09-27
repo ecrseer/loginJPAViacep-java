@@ -51,11 +51,15 @@ public class UsuarioController {
 
         try {
             var resultSavedUsuario = usuarioService.findUsuarioByEmail(usuarioComEndereco.getEmail());
+            if (resultSavedUsuario == null) {
+                request.setAttribute("falha", "email nao encontrado");
+                return "login/login";
+            }
             if (usuarioComEndereco.getPassword().equals(resultSavedUsuario.getPassword())) {
                 System.out.println(resultSavedUsuario);
                 reqSession.setAttribute(KEY_SESSAO_USUARIO, resultSavedUsuario);
             } else {
-                reqSession.setAttribute("senhaErrada", true);
+                reqSession.setAttribute("falha", "senha errada");
             }
 
         } catch (Exception err) {
